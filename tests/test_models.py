@@ -27,7 +27,7 @@ import os
 import logging
 import unittest
 from decimal import Decimal
-from service.models import Product, Category, db
+from service.models import Product, Category, db, DataValidationError
 from service import app
 from tests.factories import ProductFactory
 
@@ -145,6 +145,18 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found_product.id, origin_id)
         self.assertEqual(found_product.description, 'testing')
     
+    def test_update_a_product_no_id(self):
+        """Test update a product without id"""
+        product = ProductFactory()
+        app.logger.info(f'init {str(product)}')
+        product.id = None
+        app.logger.info(f'insert {str(product)} into table')
+        product.create()
+        self.assertIsNotNone(product.id)
+
+        product.id = None
+        self.assertRaises(DataValidationError, product.update) 
+
     def test_delete_a_product(self):
         """Test Deletion a Product"""
         app.logger.info("create a product")
@@ -212,5 +224,12 @@ class TestProductModel(unittest.TestCase):
         for product in found:
             self.assertEqual(product.category.name, first_category.name)
 
+    def test_deserialize_product(self):
+        """Test deserialize product"""
+        payload = ProductFactory()
+        data = payload.serialize()
+        data['available'] = 1
 
+        product = Product()
+        self.assertRaises(DataValidationError, product.deserialize)
 
