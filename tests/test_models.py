@@ -135,7 +135,7 @@ class TestProductModel(unittest.TestCase):
         product.description = "testing"
         origin_id = product.id
         app.logger.info(f"update product_id:{origin_id}")
-        product.update(origin_id)
+        product.update()
         self.assertEqual(product.id, origin_id)
         self.assertEqual(product.description, 'testing')
 
