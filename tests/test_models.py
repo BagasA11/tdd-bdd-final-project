@@ -231,5 +231,5 @@ class TestProductModel(unittest.TestCase):
         data['available'] = 1
 
         product = Product()
-        self.assertRaises(DataValidationError, product.deserialize)
+        self.assertRaises(DataValidationError, product.deserialize, data)
 
