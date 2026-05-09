@@ -175,8 +175,8 @@ class TestProductModel(unittest.TestCase):
         products = Product.all()
         self.assertEqual(len(products), 5)
     
-    def test_find_a_product(self):
-        """Test find a product"""
+    def test_find_product_by_name(self):
+        """Test find product by name"""
         # create 5 product
         # names=[]
         for _ in range(5):
@@ -190,8 +190,9 @@ class TestProductModel(unittest.TestCase):
         first_name = products[0].name
         
         count = len([ p for p in products if p.name == first_name])
-        by_name = Product.find_by_name(first_name)
-        self.assertEqual(len(by_name), count)
-
+        found = Product.find_by_name(first_name)
+        self.assertEqual(found.count(), count)
+        for product in found:
+            self.assertEqual(product.name, first_name)
         
 
