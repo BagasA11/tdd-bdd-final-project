@@ -224,8 +224,8 @@ class TestProductModel(unittest.TestCase):
         for product in found:
             self.assertEqual(product.category.name, first_category.name)
 
-    def test_deserialize_product(self):
-        """Test deserialize product"""
+    def test_deserialize_invalid_available(self):
+        """Test deserialize product with invalid available"""
         payload = ProductFactory()
         data = payload.serialize()
         data['available'] = 1
