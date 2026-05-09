@@ -51,7 +51,7 @@ class TestProductModel(unittest.TestCase):
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
         app.logger.setLevel(logging.CRITICAL)
         Product.init_db(app)
-
+        
     @classmethod
     def tearDownClass(cls):
         """This runs once after the entire test suite"""
@@ -104,3 +104,64 @@ class TestProductModel(unittest.TestCase):
     #
     # ADD YOUR TEST CASES HERE
     #
+    def test_read_a_product(self):
+        """Test Read a Product"""
+        # create and test a product
+        product = ProductFactory()
+        app.logger.info(f'init {str(product)}')
+        product.id = None
+        app.logger.info(f'insert {str(product)} into table')
+        product.create()
+        self.assertIsNotNone(product.id) 
+
+        app.logger.info(f'fetch product_id:{product.id}')
+        product_result = Product.find(product_id=product.id)
+        self.assertIsNotNone(product_result)
+        self.assertEqual(product.name, product_result.name)
+        self.assertEqual(product.description, product_result.description)
+        self.assertEqual(product.price, product_result.price)
+        self.assertEqual(product.available, product_result.available)
+        # self.assertEqual(product.category, product_result.category)
+    
+    def test_update_a_product(self):
+        """Test update a product"""
+        product = ProductFactory()
+        app.logger.info(f'init {str(product)}')
+        product.id = None
+        app.logger.info(f'insert {str(product)} into table')
+        product.create()
+        self.assertIsNotNone(product.id) 
+
+        product.description = "testing"
+        origin_id = product.id
+        app.logger.info(f"update product_id:{origin_id}")
+        product.update(origin_id)
+        self.assertEqual(product.id, origin_id)
+        self.assertEqual(product.description, 'testing')
+
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        found_product = products[0]
+        self.assertEqual(found_product.id, origin_id)
+        self.assertEqual(found_product.description, 'testing')
+    
+    def test_delete_a_product(self):
+        """Test Deletion a Product"""
+        app.logger.info("create a product")
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        self.assertIsNotNone(product.id)
+
+        app.logger.info('fetch all products')
+        products = Product.all()
+        self.assertEqual(len(products), 0)
+    
+        app.logger.info('delete product')
+        product.delete()
+        products = Product.all()
+        self.assertEqual(len(products), 0)
+        
+        
+        
+
