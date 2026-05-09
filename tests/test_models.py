@@ -233,3 +233,23 @@ class TestProductModel(unittest.TestCase):
         product = Product()
         self.assertRaises(DataValidationError, product.deserialize, data)
 
+    def test_find_product_by_price(self):
+        """Test find product by Price"""
+        for _ in range(5):
+            product = ProductFactory()
+            product.id = None
+            product.create()
+        all = Product.all()
+        self.assertEqual(len(all), 5)
+
+        # count and get all value with same price
+        first_price = all[0].price
+        count = len([ product for product in all if product.price == first_price ])
+        found = Product.find_by_price(first_price)
+        self.assertEqual(found.count(), count)
+        
+        # assert if all found price is same
+        for product in found:
+            self.assertEqual(product.price, first_price)
+
+
