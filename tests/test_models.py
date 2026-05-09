@@ -161,7 +161,37 @@ class TestProductModel(unittest.TestCase):
         product.delete()
         products_delete = Product.all()
         self.assertEqual(len(products_delete), 0)
+    
+    def test_list_all_product(self):
+        "Test Retrieve all product"
+        no_products = Product.all()
+        self.assertEqual(len(no_products), 0)
 
+        for _ in range(5):
+            product = ProductFactory()
+            product.id = None
+            product.create()
+
+        products = Product.all()
+        self.assertEqual(len(products), 5)
+    
+    def test_find_a_product(self):
+        """Test find a product"""
+        # create 5 product
+        # names=[]
+        for _ in range(5):
+            product = ProductFactory()
+            product.id = None
+            product.create()
+            # names.append(product.name)
         
+        products = Product.all()
+        self.assertEqual(len(products), 5)
+        first_name = products[0].name
+        
+        count = len([ p for p in products if p.name == first_name])
+        by_name = Product.find_by_name(first_name)
+        self.assertEqual(len(by_name), count)
+
         
 
