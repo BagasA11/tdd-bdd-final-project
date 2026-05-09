@@ -207,7 +207,7 @@ class TestProductModel(unittest.TestCase):
         first_category = all[0].category
         count = len([ product for product in all if product.category.name == first_category.name ])
         found = Product.find_by_category(first_category)
-        self.assertEqual(len(found), count)
+        self.assertEqual(found.count(), count)
 
         for product in found:
             self.assertEqual(product.category.name, first_category.name)
