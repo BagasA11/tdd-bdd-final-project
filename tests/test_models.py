@@ -194,5 +194,23 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found.count(), count)
         for product in found:
             self.assertEqual(product.name, first_name)
+    
+    def test_find_product_by_category(self):
+        """Test find product By Category"""
+        for _ in range(10):
+            product = ProductFactory()
+            product.id = None
+            product.create()
+        all = Product.all()
+        self.assertEqual(len(all), 10)
         
+        first_category = all[0].category
+        count = len([ product for product in all if product.category.name == first_category.name ])
+        found = Product.find_by_category(first_category)
+        self.assertEqual(len(found), count)
+
+        for product in found:
+            self.assertEqual(product.category.name, first_category.name)
+
+
 
