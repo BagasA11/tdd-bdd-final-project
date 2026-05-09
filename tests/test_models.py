@@ -155,7 +155,7 @@ class TestProductModel(unittest.TestCase):
 
         app.logger.info('fetch all products')
         products = Product.all()
-        self.assertEqual(len(products), 0)
+        self.assertEqual(len(products), 1)
     
         app.logger.info('delete product')
         product.delete()
