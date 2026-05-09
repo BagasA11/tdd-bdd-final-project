@@ -72,7 +72,11 @@ class TestProductModel(unittest.TestCase):
 
     def test_create_a_product(self):
         """It should Create a product and assert that it exists"""
-        product = Product(name="Fedora", description="A red hat", price=12.50, available=True, category=Category.CLOTHS)
+        product = Product(
+            name="Fedora", description="A red hat", 
+            price=12.50, available=True, 
+            category=Category.CLOTHS
+        )
         self.assertEqual(str(product), "<Product Fedora id=[None]>")
         self.assertTrue(product is not None)
         self.assertEqual(product.id, None)
@@ -122,7 +126,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product.price, product_result.price)
         self.assertEqual(product.available, product_result.available)
         # self.assertEqual(product.category, product_result.category)
-    
+
     def test_update_a_product(self):
         """Test update a product"""
         product = ProductFactory()
@@ -130,7 +134,7 @@ class TestProductModel(unittest.TestCase):
         product.id = None
         app.logger.info(f'insert {str(product)} into table')
         product.create()
-        self.assertIsNotNone(product.id) 
+        self.assertIsNotNone(product.id)
 
         product.description = "testing"
         origin_id = product.id
@@ -144,7 +148,7 @@ class TestProductModel(unittest.TestCase):
         found_product = products[0]
         self.assertEqual(found_product.id, origin_id)
         self.assertEqual(found_product.description, 'testing')
-    
+
     def test_update_a_product_no_id(self):
         """Test update a product without id"""
         product = ProductFactory()
@@ -155,7 +159,7 @@ class TestProductModel(unittest.TestCase):
         self.assertIsNotNone(product.id)
 
         product.id = None
-        self.assertRaises(DataValidationError, product.update) 
+        self.assertRaises(DataValidationError, product.update)
 
     def test_delete_a_product(self):
         """Test Deletion a Product"""
@@ -168,12 +172,12 @@ class TestProductModel(unittest.TestCase):
         app.logger.info('fetch all products')
         products = Product.all()
         self.assertEqual(len(products), 1)
-    
+
         app.logger.info('delete product')
         product.delete()
         products_delete = Product.all()
         self.assertEqual(len(products_delete), 0)
-    
+
     def test_list_all_product(self):
         "Test Retrieve all product"
         no_products = Product.all()
@@ -186,7 +190,7 @@ class TestProductModel(unittest.TestCase):
 
         products = Product.all()
         self.assertEqual(len(products), 5)
-    
+
     def test_find_product_by_name(self):
         """Test find product by name"""
         # create 5 product
@@ -196,11 +200,11 @@ class TestProductModel(unittest.TestCase):
             product.id = None
             product.create()
             # names.append(product.name)
-        
+
         products = Product.all()
         self.assertEqual(len(products), 5)
         first_name = products[0].name
-        
+
         count = len([ p for p in products if p.name == first_name])
         found = Product.find_by_name(first_name)
         self.assertEqual(found.count(), count)
