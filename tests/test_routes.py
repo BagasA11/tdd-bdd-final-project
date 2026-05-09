@@ -178,3 +178,19 @@ class TestProductRoutes(TestCase):
         data = response.get_json()
         # logging.debug("data = %s", data)
         return len(data)
+    
+    def test_get_product(self):
+        """Test Get product"""
+        test_product = self._create_products(1)
+        test_product_data = test_product[0]
+        response = self.client.get(f'{BASE_URL}/{test_product.id}')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        json_data = response.get_json()
+        self.assertEqual(test_product_data.id, json_data['id'])
+        self.assertEqual(test_product_data.name, json_data['name'])
+        self.assertEqual(test_product_data.description, json_data['description'])
+        self.assertEqual(test_product_data.price, json_data['price'])
+        self.assertEqual(test_product_data.category, json_data['category'])
+        self.assertEqual(test_product_data.available, json_data['available'])
+
