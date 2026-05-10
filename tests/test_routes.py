@@ -180,7 +180,7 @@ class TestProductRoutes(TestCase):
         # logging.debug("data = %s", data)
         return len(data)
     
-    def test_get_a_product(self):
+    def test_get_product(self):
         """It should get a product"""
         test_product = self._create_products(1)[0]
         # self.assertEqual(len(test_product), 1) 
@@ -205,7 +205,7 @@ class TestProductRoutes(TestCase):
         response = self.client.get(f'{BASE_URL}/1')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
     
-    def test_update_a_product(self):
+    def test_update_product(self):
         """Update product with match id"""
         logging.debug('making post request')
         test_product = ProductFactory()
@@ -226,7 +226,7 @@ class TestProductRoutes(TestCase):
         response = self.client.put(BASE_URL+'/1')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
     
-    def test_delete_a_product(self):
+    def test_delete_product(self):
         """It should deleted a product"""
         products = self._create_products(5)
         count_init = self.get_product_count()
@@ -311,3 +311,11 @@ class TestProductRoutes(TestCase):
         # check the data just to be sure
         for product in data:
             self.assertFalse(product["available"])
+    
+    def test_get_product_list(self):
+        """It should Get a list of Products"""
+        self._create_products(5)
+        response = self.client.get(BASE_URL)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), 5)
