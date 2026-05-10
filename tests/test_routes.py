@@ -181,18 +181,20 @@ class TestProductRoutes(TestCase):
     
     def test_get_a_product(self):
         """It should get a product"""
-        test_product = self._create_products(1)
-        test_product_data = test_product[0]
-        self.assertIsNotNone(test_product_data)
-        self.assertIsNotNone(test_product_data.id)
-        response = self.client.get(f'{BASE_URL}/{test_product_data.id}')
+        test_product = self._create_products(1)[0]
+        self.assertEqual(len(test_product), 1) #make sure product has been created
+        self.assertIsNotNone(test_product)
+        logging.debug(f'product id:{test_product.id}')
+        self.assertIsNotNone(test_product.id)
+        
+        logging.debug(f'GET {BASE_URL}/{test_product.id}')
+        response = self.client.get(f'{BASE_URL}/{test_product.id}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
         json_data = response.get_json()
-        self.assertEqual(test_product_data.id, json_data['id'])
-        self.assertEqual(test_product_data.name, json_data['name'])
-        self.assertEqual(test_product_data.description, json_data['description'])
-        self.assertEqual(test_product_data.price, json_data['price'])
-        self.assertEqual(test_product_data.category, json_data['category'])
-        self.assertEqual(test_product_data.available, json_data['available'])
+        self.assertEqual(test_product.id, json_data['id'])
+        self.assertEqual(test_product.name, json_data['name'])
+        self.assertEqual(test_product.description, json_data['description'])
+        self.assertEqual(test_product.price, json_data['price'])
+        self.assertEqual(test_product.category, json_data['category'])
+        self.assertEqual(test_product.available, json_data['available'])
 
