@@ -119,8 +119,6 @@ def get_a_product(product_id):
     message = product.serialize()
     return jsonify(message), status.HTTP_200_OK
 
-
-
 ######################################################################
 # U P D A T E   A   P R O D U C T
 ######################################################################
@@ -129,6 +127,13 @@ def get_a_product(product_id):
 # PLACE YOUR CODE TO UPDATE A PRODUCT HERE
 #
 
+@app.route('/products/<int:product_id>', methods=['PUT'])
+def update_product(product_id):
+    # validate /product_id
+    if product_id == 0 or product_id is None:
+        return {'message': 'product /id not set'}, status.HTTP_400_BAD_REQUEST
+    payload = request.get_json()
+    
 ######################################################################
 # D E L E T E   A   P R O D U C T
 ######################################################################
