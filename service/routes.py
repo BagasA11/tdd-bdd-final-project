@@ -130,8 +130,9 @@ def get_a_product(product_id):
 @app.route('/products/<int:product_id>', methods=['PUT'])
 def update_product(product_id):
     # validate /product_id
-    if product_id == 0 or product_id is None:
+    if product_id in ['', ' ', 0, None, False]:
         return {'message': 'product /id not set'}, status.HTTP_400_BAD_REQUEST
+
     found = Product.find(product_id)
     if found is None:
         abort(status.HTTP_404_NOT_FOUND)
