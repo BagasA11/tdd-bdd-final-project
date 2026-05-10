@@ -174,7 +174,7 @@ def list_products():
         products = Product.find_by_category(category_value)
     elif available:
         app.logger.info("Find by available: %s", available)
-        available_value = True if available in ['1', 'true', 'True', True, 1] else False
+        available_value = True if available in ['1', 'true', 'True', True, 1, 'yes'] else False
         products = Product.find_by_availability(available_value)
     else:
         app.logger.info("Find all")
