@@ -130,8 +130,6 @@ def get_a_product(product_id):
 @app.route('/products/<int:product_id>', methods=['PUT'])
 def update_product(product_id):
     # validate /product_id
-    if product_id in ['', ' ', 0, None, False]:
-        return {'message': 'product /id not set'}, status.HTTP_400_BAD_REQUEST
 
     found = Product.find(product_id)
     if found is None:
@@ -150,3 +148,12 @@ def update_product(product_id):
 #
 # PLACE YOUR CODE TO DELETE A PRODUCT HERE
 #
+
+
+#####################################################################
+# INVALID product id
+#####################################################################
+app.route('/products', method='PUT')
+def update_product_invalid_id():
+    # raise HTTPException(status_code=405, detail="Product ID is required in URL")
+    return {'message': 'missing /id in url'}, status.HTTP_400_BAD_REQUEST
