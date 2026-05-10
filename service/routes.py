@@ -163,7 +163,7 @@ def list_products():
     products = []
     name = request.args.get("name")
     category = request.args.get("category")
-
+    available = request.args.get('available')
     if name:
         app.logger.info("Find by name: %s", name)
         products = Product.find_by_name(name)
@@ -172,6 +172,10 @@ def list_products():
         # create enum from string
         category_value = getattr(Category, category.upper())
         products = Product.find_by_category(category_value)
+    elif available:
+        app.logger.info("Find by available: %s", available)
+        available_value = True if available in ['1', 'true', 'True', True, 1] else False
+        products = Product.find_by_availability(available_value)
     else:
         app.logger.info("Find all")
         products = Product.all()
