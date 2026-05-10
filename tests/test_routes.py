@@ -197,4 +197,10 @@ class TestProductRoutes(TestCase):
         self.assertEqual(test_product.price, json_data['price'])
         self.assertEqual(test_product.category, json_data['category'])
         self.assertEqual(test_product.available, json_data['available'])
+    
+    def test_product_not_found(self):
+        """Not Found product should return 404 code"""
+        logging.debug(f'making request GET {BASE_URL}/1')
+        response = self.client.get(f'{BASE_URL}/1')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
