@@ -101,7 +101,7 @@ def create_products():
 #
 # PLACE YOUR CODE TO LIST ALL PRODUCTS HERE
 #
-@app.route('/products', methods=['GET']):
+@app.route('/products', methods=['GET'])
 def list_all_product():
     """This endpoint return list of all products"""
     products = Product.all()
