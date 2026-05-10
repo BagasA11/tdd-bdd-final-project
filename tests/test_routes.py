@@ -261,4 +261,4 @@ class TestProductRoutes(TestCase):
         self.assertEqual(len(data), count)
 
         for product in data:
-            self.assertEqual(product.name, test_name)
+            self.assertEqual(product['name'], test_name)
