@@ -182,10 +182,10 @@ class TestProductRoutes(TestCase):
     def test_get_a_product(self):
         """It should get a product"""
         test_product = self._create_products(1)[0]
-        self.assertEqual(len(test_product), 1) #make sure product has been created
-        self.assertIsNotNone(test_product)
+        # self.assertEqual(len(test_product), 1) 
+        # self.assertIsNotNone(test_product) 
         logging.debug(f'product id:{test_product.id}')
-        self.assertIsNotNone(test_product.id)
+        self.assertIsNotNone(test_product.id) #make sure product has been created
         
         logging.debug(f'GET {BASE_URL}/{test_product.id}')
         response = self.client.get(f'{BASE_URL}/{test_product.id}')
