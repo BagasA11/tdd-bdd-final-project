@@ -32,6 +32,7 @@ from service import app
 from service.common import status
 from service.models import db, init_db, Product
 from tests.factories import ProductFactory
+from urllib.parse import quote_plus
 
 # Disable all but critical errors during normal test run
 # uncomment for debugging failing tests
@@ -240,4 +241,24 @@ class TestProductRoutes(TestCase):
         count_after = self.get_product_count()
         self.assertEqual(count_after, count_init - 1)
 
+    def test_empty_products(self):
+        """should returned empty results"""
+        response = self.client.get(BASE_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.get_json()), 0)
+    
+    def test_query_by_name(self):
+        """It should Query Products by name"""
+        products = self._create_products(5)
+        test_name = products[0].name
+        count = len([ product for product in products if product.name == test_name ])
+        response = self.client.get(
+            BASE_URL, query_string=f"name={quote_plus(test_name)}"
+        )
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), count)
+
+        for product in data:
+            self.assertEqual(product.data, test_name)
