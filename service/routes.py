@@ -108,7 +108,7 @@ def list_all_product():
     if len(products) == 0:
         return "", status.HTTP_200_OK
     
-    format_products = [product.deserialize() for product in products]
+    format_products = [product.serialize() for product in products]
     return jsonify(format_products), status.HTTP_200_OK
     
 
