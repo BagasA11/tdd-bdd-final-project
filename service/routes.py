@@ -112,6 +112,7 @@ def create_products():
 
 @app.route("/products/<int:product_id>")
 def get_a_product(product_id):
+    """This endpoint will find product by given ID"""
     app.logger.info(f'request a product {product_id}')
     product = Product.find(product_id)
     if product is None:
@@ -129,6 +130,7 @@ def get_a_product(product_id):
 
 @app.route('/products/<int:product_id>', methods=['PUT'])
 def update_product(product_id):
+    """This endpoint will update product with given id"""
     # validate /product_id
 
     found = Product.find(product_id)
@@ -144,16 +146,17 @@ def update_product(product_id):
 # D E L E T E   A   P R O D U C T
 ######################################################################
 
-
 #
 # PLACE YOUR CODE TO DELETE A PRODUCT HERE
 #
+@app.route("/products/<int:product_id>", methods=["DELETE"])
+def delete_products(product_id):
+    """
+    Delete a Product
+    This endpoint will delete a Product based the id specified in the path
+    """
+    app.logger.info("Request to Delete a product with id [%s]", product_id)
 
-
-#####################################################################
-# INVALID product id
-#####################################################################
-app.route('/products', method='PUT')
-def update_product_invalid_id():
-    # raise HTTPException(status_code=405, detail="Product ID is required in URL")
-    return {'message': 'missing /id in url'}, status.HTTP_400_BAD_REQUEST
+    delete_product = Product.find(int(product_id))
+    delete_product.delete()
+    return "", status.HTTP_204_NO_CONTENT

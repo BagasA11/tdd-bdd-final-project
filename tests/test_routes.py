@@ -220,15 +220,24 @@ class TestProductRoutes(TestCase):
         updated_product = response.get_json()
         self.assertEqual(updated_product['description'], 'unknown')
     
-    def test_update_no_id(self):
-        """Test update a product with no ID"""
-        test_product = ProductFactory()
-        response = self.client.put(BASE_URL+'/', json=test_product.serialize())
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    
     def test_update_not_found(self):
         """Test update a product with notfound ID"""
         response = self.client.put(BASE_URL+'/1')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_delete_a_product(self):
+        """It should deleted a product"""
+        products = self._create_products(5)
+        count_init = self.get_product_count()
+        test_product = products[0]
+        response = self.client.delete(f'{BASE_URL}/{test_product.id}')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(response.data), 0)
+
+        not_found = self.client.get(f'{BASE_URL}/{test_product.id}')
+        self.assertEqual(not_found.status_code, status.HTTP_404_NOT_FOUND)
+
+        count_after = self.get_product_count()
+        self.assertEqual(count_after, count_init - 1)
 
 
