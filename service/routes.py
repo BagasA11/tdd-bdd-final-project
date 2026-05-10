@@ -133,7 +133,7 @@ def update_product(product_id):
     if product_id == 0 or product_id is None:
         return {'message': 'product /id not set'}, status.HTTP_400_BAD_REQUEST
     payload = request.get_json()
-    
+    return {'message':'ok'}, status.HTTP_200_OK
 ######################################################################
 # D E L E T E   A   P R O D U C T
 ######################################################################
