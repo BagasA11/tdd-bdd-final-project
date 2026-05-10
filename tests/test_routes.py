@@ -194,7 +194,7 @@ class TestProductRoutes(TestCase):
         self.assertEqual(test_product.id, json_data['id'])
         self.assertEqual(test_product.name, json_data['name'])
         self.assertEqual(test_product.description, json_data['description'])
-        self.assertEqual(test_product.price, json_data['price'])
+        self.assertEqual(test_product.price, Decimal(json_data['price']))
         self.assertEqual(test_product.category, json_data['category'])
         self.assertEqual(test_product.available, json_data['available'])
     
