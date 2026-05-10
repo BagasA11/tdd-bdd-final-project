@@ -125,7 +125,6 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product.description, product_result.description)
         self.assertEqual(product.price, product_result.price)
         self.assertEqual(product.available, product_result.available)
-        # self.assertEqual(product.category, product_result.category)
 
     def test_update_a_product(self):
         """Test update a product"""
@@ -181,7 +180,7 @@ class TestProductModel(unittest.TestCase):
     def test_list_all_product(self):
         "Test Retrieve all product"
         no_products = Product.all()
-        self.assertEqual(len(no_products), 0)
+        self.assertEqual(no_products, [])
 
         for _ in range(5):
             product = ProductFactory()
@@ -194,39 +193,31 @@ class TestProductModel(unittest.TestCase):
     def test_find_product_by_name(self):
         """Test find product by name"""
         # create 5 product
-        # names=[]
-        for _ in range(5):
-            product = ProductFactory()
-            product.id = None
+
+        products = ProductFactory.create_batch(5)
+        for product in products:
             product.create()
-            # names.append(product.name)
+        name = products[0].name
 
-        products = Product.all()
-        self.assertEqual(len(products), 5)
-        first_name = products[0].name
-
-        count = len([ p for p in products if p.name == first_name])
-        found = Product.find_by_name(first_name)
+        count = len([ p for p in products if p.name == name])
+        found = Product.find_by_name(name)
         self.assertEqual(found.count(), count)
         for product in found:
-            self.assertEqual(product.name, first_name)
+            self.assertEqual(product.name, name)
     
     def test_find_product_by_category(self):
         """Test find product By Category"""
-        for _ in range(10):
-            product = ProductFactory()
-            product.id = None
+        products = ProductFactory.create_batch(10)
+        for product in products:
             product.create()
-        all = Product.all()
-        self.assertEqual(len(all), 10)
         
-        first_category = all[0].category
-        count = len([ product for product in all if product.category.name == first_category.name ])
-        found = Product.find_by_category(first_category)
+        category = products[0].category
+        count = len([ product for product in products if product.category == category ])
+        found = Product.find_by_category(category)
         self.assertEqual(found.count(), count)
 
         for product in found:
-            self.assertEqual(product.category.name, first_category.name)
+            self.assertEqual(product.category, category)
 
     def test_deserialize_invalid_available(self):
         """Test deserialize product with invalid available"""
@@ -256,4 +247,16 @@ class TestProductModel(unittest.TestCase):
         for product in found:
             self.assertEqual(product.price, first_price)
 
+    def test_find_product_by_availability(self):
+        """Must retrieve all product that match available field"""
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.create()
 
+        available = products[0].available
+        
+        count = len([product for product in products if product.available == available])
+        found = Product.find_by_availability(available=available)
+        self.assertEqual(found.count(), count)
+        for product in found:
+            self.assertEqual(product.available, available)

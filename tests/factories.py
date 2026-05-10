@@ -45,3 +45,7 @@ class ProductFactory(factory.Factory):
         Category.UNKNOWN,Category.CLOTHS,Category.FOOD,
         Category.HOUSEWARES,Category.AUTOMOTIVE,Category.TOOLS
     ])
+
+    @classmethod
+    def create_batch(cls, batch:int):
+        return [ProductFactory() for i in range(batch)]
