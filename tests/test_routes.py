@@ -222,11 +222,11 @@ class TestProductRoutes(TestCase):
     
     def test_update_no_id(self):
         """Test update a product with no ID"""
-        response = self.client.put(BASE_URL)
+        response = self.client.put(BASE_URL+'/ ')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
     
     def test_update_not_found(self):
-        """Test update a product with no ID"""
+        """Test update a product with notfound ID"""
         response = self.client.put(BASE_URL+'/1')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
